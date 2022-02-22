@@ -2,6 +2,7 @@ const express = require('express');
 const Playlist = require('./models/playlist');
 const Artist = require('./models/artist');
 const Album = require('./models/album');
+const Track = require('./models/track');
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
@@ -14,6 +15,18 @@ Artist.hasMany(Album, {
 
 Album.belongsTo(Artist, {
     foreignKey: 'ArtistId'
+});
+
+Playlist.belongsToMany(Track, {
+    through: 'playlist_track',
+    foreignKey: 'PlaylistId',
+    timestamps: false
+});
+
+Track.belongsToMany(Playlist, {
+    through: 'playlist_track',
+    foreignKey: 'TrackId',
+    timestamps: false
 })
 
 app.get('/api/playlists', (req, res) => {
@@ -39,7 +52,9 @@ app.get('/api/playlists/:id', (req, res) => {
 
     let { id } = req.params
 
-    Playlist.findByPk(id).then((playlist) => {
+    Playlist.findByPk(id, {
+        include: [Track]
+    }).then((playlist) => {
         if (playlist) {
             res.json(playlist);
         } else {
