@@ -8,6 +8,13 @@ const { Op } = Sequelize;
 
 const app = express();
 
+Artist.hasMany(Album, {
+    foreignKey: 'ArtistId'
+});
+
+Album.belongsTo(Artist, {
+    foreignKey: 'ArtistId'
+})
 
 app.get('/api/playlists', (req, res) => {
     let filter = {};
@@ -41,18 +48,35 @@ app.get('/api/playlists/:id', (req, res) => {
     })
 });
 
-// app.get('/api/artists/:id', (req, res) => {
+app.get('/api/artists/:id', (req, res) => {
 
-//     let { id } = req.params
+    let { id } = req.params
 
-//     Artist.findByPk(id).then((artist) => {
-//         if (artist) {
-//             res.json(artist);
-//         } else {
-//             res.status(404).send();
-//         }
-//     })
-// });
+    Artist.findByPk(id, {
+        include: [Album]
+    }).then((artist) => {
+        if (artist) {
+            res.json(artist);
+        } else {
+            res.status(404).send();
+        }
+    })
+});
+
+app.get('/api/albums/:id', (req, res) => {
+
+    let { id } = req.params
+
+    Album.findByPk(id, {
+        include: [Artist]
+    }).then((album) => {
+        if (album) {
+            res.json(album);
+        } else {
+            res.status(404).send();
+        }
+    })
+});
 
 app.listen(8000, () => {
     console.log(`server running on port 8000`);
