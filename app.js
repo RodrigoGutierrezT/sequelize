@@ -38,16 +38,16 @@ app.post('/api/artists', (req, res) => {
         name: req.body.name  
     }).then((artist) => {
         res.json(artist)
-    }), (err) => {
+    }, (validation) => {
         res.json({
-            errors: err.errors.map((error) => {
+            errors: validation.errors.map((error) => {
                 return {
                     attribute: error.path,
                     message: error.message
                 }
             })
         })
-    }
+    })
 
 });
 
