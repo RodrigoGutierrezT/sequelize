@@ -39,7 +39,7 @@ app.post('/api/artists', (req, res) => {
     }).then((artist) => {
         res.json(artist)
     }, (validation) => {
-        res.json({
+        res.status(422).json({
             errors: validation.errors.map((error) => {
                 return {
                     attribute: error.path,
