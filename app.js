@@ -1,6 +1,7 @@
 const express = require('express');
 const Playlist = require('./models/playlist');
-// const Artist = require('./models/artist');
+const Artist = require('./models/artist');
+const Album = require('./models/album');
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
