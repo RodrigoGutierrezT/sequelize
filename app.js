@@ -93,6 +93,21 @@ app.get('/api/albums/:id', (req, res) => {
     })
 });
 
+app.get('/api/tracks/:id', (req, res) => {
+
+    let { id } = req.params
+
+    Track.findByPk(id, {
+        include: [Playlist]
+    }).then((track) => {
+        if (track) {
+            res.json(track);
+        } else {
+            res.status(404).json('playlist not found');
+        }
+    })
+});
+
 app.listen(8000, () => {
     console.log(`server running on port 8000`);
 });
