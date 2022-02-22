@@ -44,7 +44,11 @@ app.get('/api/playlists', (req, res) => {
     }
 
     Playlist.findAll(filter).then((playlists) => {
-        res.json(playlists);
+        if (playlists) {
+            res.json(playlists);
+        } else {
+            res.status(404).json('playlist not found');
+        }
     })
 });
 
@@ -73,7 +77,7 @@ app.get('/api/artists/:id', (req, res) => {
         if (artist) {
             res.json(artist);
         } else {
-            res.status(404).send();
+            res.status(404).json('artist not found');
         }
     })
 });
@@ -88,7 +92,7 @@ app.get('/api/albums/:id', (req, res) => {
         if (album) {
             res.json(album);
         } else {
-            res.status(404).send();
+            res.status(404).json('album not found');
         }
     })
 });
@@ -103,7 +107,7 @@ app.get('/api/tracks/:id', (req, res) => {
         if (track) {
             res.json(track);
         } else {
-            res.status(404).json('playlist not found');
+            res.status(404).json('track not found');
         }
     })
 });
