@@ -5,7 +5,8 @@ module.exports = sequelize.define('artist', {
     id: {
         field: 'ArtistId',
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     name: {
         field: 'Name',

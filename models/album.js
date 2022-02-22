@@ -5,7 +5,8 @@ module.exports = sequelize.define('album', {
     id: {
         field: 'AlbumId',
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     title: {
         field: 'Title',

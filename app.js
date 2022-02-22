@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const Playlist = require('./models/playlist');
 const Artist = require('./models/artist');
 const Album = require('./models/album');
@@ -8,6 +9,8 @@ const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 const app = express();
+
+app.use(bodyParser.json());
 
 Artist.hasMany(Album, {
     foreignKey: 'ArtistId'
@@ -28,6 +31,25 @@ Track.belongsToMany(Playlist, {
     foreignKey: 'TrackId',
     timestamps: false
 })
+
+app.post('/api/artists', (req, res) => {
+
+    Artist.create({
+        name: req.body.name  
+    }).then((artist) => {
+        res.json(artist)
+    }), (err) => {
+        res.json({
+            errors: err.errors.map((error) => {
+                return {
+                    attribute: error.path,
+                    message: error.message
+                }
+            })
+        })
+    }
+
+});
 
 app.get('/api/playlists', (req, res) => {
     let filter = {};
