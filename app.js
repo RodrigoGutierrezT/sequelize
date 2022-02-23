@@ -32,6 +32,26 @@ Track.belongsToMany(Playlist, {
     timestamps: false
 })
 
+app.delete('/api/playlists/:id', (req, res) => {
+    let { id } = req.params;
+
+    Playlist.findByPk(id).then((playlist) => {
+        if(playlist) {
+            return playlist.setTracks([]).then(() => {
+                return playlist.destroy();
+            });
+        } else {
+            return Promise.reject();
+        }
+       
+    })
+    .then(() => {
+        res.status(204).send();
+    }, () => {
+        res.status(404).send();
+    });
+});
+
 app.post('/api/artists', (req, res) => {
 
     Artist.create({
